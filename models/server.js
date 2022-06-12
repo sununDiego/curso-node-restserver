@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 
 
+const { conexion } = require('../database/config');
+
+
 class Server {
     constructor() {
         this.app = express();
@@ -9,6 +12,8 @@ class Server {
 
         this.usuariosPath = '/api/usuarios';
 
+        //Conectar a la base de datos
+        this.conexionDB();
 
         //Middlewares -- Funciones que agregan otras funcionalidades al webserver
         //Función que siempre se ejecuta cuando se levanta el servidor
@@ -18,10 +23,18 @@ class Server {
         //cuando se llama al constructor se llama a las rutas
         //Rutas de la aplicación
         this.routes();
+        
     }
 
 
     //Métodos
+
+    //Conexión a la base de datos
+    async conexionDB(){
+        await conexion();
+    }
+
+
 
     //Middlewares
     middlewares(){
