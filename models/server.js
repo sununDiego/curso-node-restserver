@@ -7,7 +7,10 @@ const { conexion } = require('../database/config');
 
 class Server {
     constructor() {
+        //Framework express.
         this.app = express();
+
+        //Variables globales
         this.port = process.env.PORT;
 
         this.usuariosPath = '/api/usuarios';
