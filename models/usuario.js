@@ -46,4 +46,4 @@ const UsuarioSchema = Schema({
 
 //Mongoose le asigna el nombre 'Usuario' a la colección junto con la "S" Usuarios
 
-modulo.exports = model('Usuario', UsuarioSchema);
+module.exports = model('Usuario', UsuarioSchema);
