@@ -2,6 +2,7 @@
 
 const { request, response } = require('express');
 
+
 //Pquete para cifrar password
 const bcriptjs = require('bcryptjs');
 
@@ -30,7 +31,8 @@ const usuariosGet = (req = request, res = response) => {
 
 
 const usuariosPost = async (req, res = response) => {
- 
+    
+    
     //Capturar el body en el request.
     //Desestructuración del body 
     //const { nombre, edad } = req.body;

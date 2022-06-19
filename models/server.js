@@ -39,7 +39,7 @@ class Server {
 
 
 
-    //Middlewares
+    //Middlewares función que se ejecuta antes de llamar un controlador o seguir con la ejecución de las validaciones
     middlewares(){
         //Directorio Público
         this.app.use( express.static('public') );
