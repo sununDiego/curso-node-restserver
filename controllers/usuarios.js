@@ -70,7 +70,6 @@ const usuariosPost = async (req, res = response) => {
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
         //ok: true,
         //msg: 'post API - controlador',
-
         //Reflejo el body en el response para visualizarlo en postman
         usuario
     });

@@ -44,6 +44,16 @@ const UsuarioSchema = Schema({
 });
 
 
+//Métodos que me permiten sobrescribir los existentes de mongoose
+//Métodos personalizados
+
+//Cuando se mande a llamar el toJSON se ejecuta la función
+UsuarioSchema.methods.toJSON = function() {
+    const { __v, password, ...usuario } = this.toObject();
+    return usuario;
+}
+
+
 //Mongoose le asigna el nombre 'Usuario' a la colección junto con la "S" Usuarios
 
 module.exports = model('Usuario', UsuarioSchema);

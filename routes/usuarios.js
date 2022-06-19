@@ -4,7 +4,8 @@
 const { Router } = require('express'); //Esto me va a permitir crear una instancia de Router
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
-const Role = require('../models/role');
+const { esRolValido } = require('../helpers/db-validators');
+
 
 const { usuariosGet, 
         usuariosPost, 
@@ -27,14 +28,8 @@ router.post('/',[
     check('password', 'El password debe contener más de 6 letras').isLength({ min: 6 }),
     //check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROL']),
 
-     check('rol').custom( async (rol = '') => { //verificación personalizada mandando el custom
-        //El custom recibe como argumento el rol que recibo del body, en caso de no venga el parámetro se asigna un valor vacío
-        const existeRol = await Role.findOne({ rol });
-        if( !existeRol ){ //Si no existe el rol
-            //Express validator funciona con el throw new error para errores personalizados
-            throw new Error(` El rol  ${ rol } no esta registrado en el Base de datos`)  //Error personalizado que es capturado en el Custom
-        }
-    }),
+    //Validar rol contra la base de datos
+    check('rol').custom( esRolValido ),
 
     validarCampos, //Middleware después de todas las validaciones del check    
 ], usuariosPost );
