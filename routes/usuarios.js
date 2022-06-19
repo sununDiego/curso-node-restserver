@@ -4,7 +4,7 @@
 const { Router } = require('express'); //Esto me va a permitir crear una instancia de Router
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
-const { esRolValido } = require('../helpers/db-validators');
+const { esRolValido, emailExiste } = require('../helpers/db-validators');
 
 
 const { usuariosGet, 
@@ -28,6 +28,9 @@ router.post('/',[
     check('password', 'El password debe contener más de 6 letras').isLength({ min: 6 }),
     //check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROL']),
 
+    //Validar si existe el correo
+    check('correo').custom( emailExiste ) ,
+    
     //Validar rol contra la base de datos
     check('rol').custom( esRolValido ),
 

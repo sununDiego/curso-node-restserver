@@ -13,11 +13,11 @@ const Usuario = require('../models/usuario');
 
 //Función GET
 const usuariosGet = (req = request, res = response) => {
-    
+
     //Desestructuración de los query ?nombre=diego&password=123456
     //Podemos asignar valores por defecto
     const { q, nombre = 'No name', password, page = 1, limit } = req.query;
-    
+
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
         ok: true,
         msg: 'get API - controlador',
@@ -31,12 +31,12 @@ const usuariosGet = (req = request, res = response) => {
 
 
 const usuariosPost = async (req, res = response) => {
-    
-    
+
+
     //Capturar el body en el request.
     //Desestructuración del body 
     //const { nombre, edad } = req.body;
-    
+
     const { nombre, correo, password, rol } = req.body;
 
     //const { nombre, ...resto } = req.body;
@@ -51,18 +51,9 @@ const usuariosPost = async (req, res = response) => {
     const usuario = new Usuario({ nombre, correo, password, rol });
 
     /*CIFRADO DE LA CONTRASEÑA*/
-    /*Verificar que el correo existe */
-    const existeEmail = await Usuario.findOne({ correo });
-    if ( existeEmail ) {
-        return res.status(400).json({
-            msg: 'El correo ya esta registrado'
-        });
-    }
-
-
     /*Hash del password */
     const salt = bcriptjs.genSaltSync(10); //Número de iteraciones para el password
-    usuario.password = bcriptjs.hashSync( password, salt )
+    usuario.password = bcriptjs.hashSync(password, salt)
 
     /*Grabar el registro en BD*/
     await usuario.save();
@@ -76,14 +67,28 @@ const usuariosPost = async (req, res = response) => {
 }
 
 
-const usuariosPut = (req, res = response) => {
-    
+const usuariosPut = async(req, res = response) => {
+
     const { id } = req.params;
-    
+
+    //Desestructurar la información que viene en el body
+    const { password, google, correo, ...resto } = req.body;
+
+    /* Todo validar vs. Base de datos*/
+    /* Si actualiza la contraseña aquí lo guarda en resto.*/
+    if (password) { //Si viene la contraseña se quiere cambiar el password
+        /*Hash del password */
+        const salt = bcriptjs.genSaltSync(10); //Número de iteraciones para el password
+        resto.password = bcriptjs.hashSync(password, salt)
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate( id, resto );
+
+
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
-        ok: true,
+        //ok: true,
         msg: 'put API - controlador',
-        id
+        usuario
     });
 }
 
@@ -96,7 +101,7 @@ const usuariosDelete = (req, res = response) => {
 
 
 
-module.exports ={
+module.exports = {
     usuariosGet,
     usuariosPost,
     usuariosPut,
