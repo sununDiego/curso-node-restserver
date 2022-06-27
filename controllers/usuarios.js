@@ -12,20 +12,21 @@ const Usuario = require('../models/usuario');
 
 
 //Función GET
-const usuariosGet = (req = request, res = response) => {
+const usuariosGet = async (req = request, res = response) => {
 
-    //Desestructuración de los query ?nombre=diego&password=123456
-    //Podemos asignar valores por defecto
-    const { q, nombre = 'No name', password, page = 1, limit } = req.query;
+    //Desestructuración de los query
+    const { limite = 5, desde= 0 } = req.query;  //Si no viene el limite, por defecto su valor será de 5
+
+    //Get de todos los usuarios 
+    const usuarios = await Usuario.find()
+        .skip(Number(desde))
+        .limit(Number(limite)); //establecer limite de registros que quiero recibir
+
 
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
-        ok: true,
-        msg: 'get API - controlador',
-        q,
-        nombre,
-        password,
-        page,
-        limit
+        //ok: true,
+        //msg: 'get API - controlador',
+        usuarios
     });
 }
 
@@ -72,7 +73,7 @@ const usuariosPut = async(req, res = response) => {
     const { id } = req.params;
 
     //Desestructurar la información que viene en el body
-    const { password, google, correo, ...resto } = req.body;
+    const { _id, password, google, correo, ...resto } = req.body;
 
     /* Todo validar vs. Base de datos*/
     /* Si actualiza la contraseña aquí lo guarda en resto.*/
@@ -87,7 +88,7 @@ const usuariosPut = async(req, res = response) => {
 
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
         //ok: true,
-        msg: 'put API - controlador',
+        //msg: 'put API - controlador',
         usuario
     });
 }

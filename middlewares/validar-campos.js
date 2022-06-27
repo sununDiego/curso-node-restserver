@@ -6,7 +6,7 @@ const { validationResult } = require('express-validator');
 const validarCampos = ( req, res, next ) => { 
     /*Express validator*/
     const errors = validationResult(req);
-    if( !errors.isEmpty() ){ //Si hay errorer
+    if( !errors.isEmpty() ){ //Si hay error
         return res.status(400).json(errors); //Error 400 
     }
 

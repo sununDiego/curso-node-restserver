@@ -3,7 +3,7 @@ const Usuario = require('../models/usuario');
 
 const esRolValido = async (rol = '') => { //verificación personalizada mandando el custom
     //El custom recibe como argumento el rol que recibo del body, en caso de no venga el parámetro se asigna un valor vacío
-    const existeRol = await Role.findOne({ rol });
+    const existeRol = await Role.findOne({ rol }); // Por que aquí entre llaves ???????
 
     if (!existeRol) { //Si no existe el rol
         //Express validator funciona con el throw new error para errores personalizados
@@ -13,15 +13,26 @@ const esRolValido = async (rol = '') => { //verificación personalizada mandando
 
 const emailExiste = async ( correo = '') => {
     /*Verificar que el correo existe */
-    const existeEmail = await Usuario.findOne({ correo });
+    const existeEmail = await Usuario.findOne({ correo }); //Por que aquí entre llaves ??????
     if (existeEmail) {
         throw new Error(`El correo: ${ correo } ya esta registrado`);
     }
 }
 
 
+/*Validar si existe el ID de un susario en la base de datos */
+const usuarioExisteByID = async ( id ) => {
+    const existeUsuario = await Usuario.findById(id);
+    if (!existeUsuario) {
+        throw new Error(`El id: ${ id } no existe en la base de datos`);
+    }
+}
+
+
+
 
 module.exports = {
     esRolValido,
-    emailExiste
+    emailExiste,
+    usuarioExisteByID
 }
