@@ -7,11 +7,11 @@ const { validarCampos } = require('../middlewares/validar-campos');
 const { esRolValido, emailExiste, usuarioExisteByID } = require('../helpers/db-validators');
 
 
-const { usuariosGet, 
-        usuariosPost, 
-        usuariosPut, 
-        usuariosDelete
-    } = require('../controllers/usuarios');
+const { usuariosGet,
+    usuariosPost,
+    usuariosPut,
+    usuariosDelete
+} = require('../controllers/usuarios');
 
 
 
@@ -20,39 +20,50 @@ const router = Router();
 
 //Configura las rutas
 //Endpoints
-router.get('/', usuariosGet );
+router.get('/', usuariosGet);
 
-router.post('/',[
+router.post('/', [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
     check('correo', 'El correo no es válido').isEmail(),
     check('password', 'El password debe contener más de 6 letras').isLength({ min: 6 }),
     //check('rol', 'No es un rol permitido').isIn(['ADMIN_ROLE', 'USER_ROL']),
 
     //Validar si existe el correo Validación personalizada
-    check('correo').custom( emailExiste ) ,
-    
+    check('correo').custom(emailExiste),
+
     //Validar rol contra la base de datos
-    check('rol').custom( esRolValido ),
+    check('rol').custom(esRolValido),
 
     validarCampos, //Middleware después de todas las validaciones del check    
-], usuariosPost );
- 
+], usuariosPost);
+
 
 router.put('/:id', [
     //Verificar que el id enviado sea un id válido de mongo
     check('id', 'No es un ID válido').isMongoId(),
 
     //Validar si el id existe Validación personalizada
-    check('id').custom( usuarioExisteByID ),
+    check('id').custom(usuarioExisteByID),
 
     //Validar rol contra la base de datos
-    check('rol').custom( esRolValido ),
+    check('rol').custom(esRolValido),
 
     validarCampos //Middleware después de todas las validaciones del check 
-],usuariosPut );
+], usuariosPut);
 
 
-router.delete('/', usuariosDelete );
+router.delete('/:id', [
+    //Verificar que el id enviado sea un id válido de mongo
+    check('id', 'No es un ID válido').isMongoId(),
+    
+    //Validar si el id existe Validación personalizada
+    check('id').custom(usuarioExisteByID),
+
+    //Validar campos por que estoy usando el check
+    validarCampos //Middleware después de todas las validaciones del check
+
+
+], usuariosDelete);
 
 
 

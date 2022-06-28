@@ -15,25 +15,38 @@ const Usuario = require('../models/usuario');
 const usuariosGet = async (req = request, res = response) => {
 
     //Desestructuración de los query
-    const { limite = 5, desde= 0 } = req.query;  //Si no viene el limite, por defecto su valor será de 5
+    const { limite = 5, desde = 0 } = req.query;  //Si no viene el limite, por defecto su valor será de 5
+    const condicion = { estado: true };
 
     //Get de todos los usuarios 
-    const usuarios = await Usuario.find()
-        .skip(Number(desde))
-        .limit(Number(limite)); //establecer limite de registros que quiero recibir
+    //const usuarios = await Usuario.find( condicion ) //Se manda un objeto con la condción solo usuarios en true
+    //  .skip(Number(desde))
+    //  .limit(Number(limite)); //establecer limite de registros que quiero recibir
 
+    //Número total de registros
+    //const total = await Usuario.countDocuments( condicion );
+
+
+    //Colección de promesas
+    const [total, usuarios] = await Promise.all([ //Promise.all ejecuta ambas de manera simulatanea, si una da error todas dan error
+        Usuario.countDocuments(condicion),
+        Usuario.find(condicion)
+            .skip(Number(desde))
+            .limit(Number(limite))
+    ])
 
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
         //ok: true,
         //msg: 'get API - controlador',
+        total,
         usuarios
+        //respuesta
+
     });
 }
 
 
 const usuariosPost = async (req, res = response) => {
-
-
     //Capturar el body en el request.
     //Desestructuración del body 
     //const { nombre, edad } = req.body;
@@ -68,7 +81,7 @@ const usuariosPost = async (req, res = response) => {
 }
 
 
-const usuariosPut = async(req, res = response) => {
+const usuariosPut = async (req, res = response) => {
 
     const { id } = req.params;
 
@@ -83,7 +96,7 @@ const usuariosPut = async(req, res = response) => {
         resto.password = bcriptjs.hashSync(password, salt)
     }
 
-    const usuario = await Usuario.findByIdAndUpdate( id, resto );
+    const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
 
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
@@ -93,10 +106,23 @@ const usuariosPut = async(req, res = response) => {
     });
 }
 
-const usuariosDelete = (req, res = response) => {
+const usuariosDelete = async (req, res = response) => {
+    
+    const { id } = req.params;
+
+    //Borrar fisicamente
+    //const usuario = await Usuario.findByIdAndDelete ( id );
+    
+    //cambiando el estado del usuario
+    const usuario = await Usuario.findByIdAndUpdate (id, { estado: false });
+
+
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
-        ok: true,
-        msg: 'delete API - controlador'
+        //ok: true,
+        //msg: 'delete API - controlador'
+        //id
+        //usuario borrado
+        usuario 
     });
 }
 
