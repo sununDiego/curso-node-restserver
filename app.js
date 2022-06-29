@@ -1,6 +1,7 @@
 //importaciones propias de NODE
 
 //importaciones de terceros
+//Varaibales de entorno
 require('dotenv').config();
 
 //importar server
