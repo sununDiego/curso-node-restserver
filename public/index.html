@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,69 +8,68 @@
 
 
 </head>
+
 <body>
 
     <h1>Google Signin</h1>
     <hr>
-    
-    <div id="g_id_onload"
-        data-client_id="1004197065702-p108mma61hucnrp3qo7bjksai38qr8vt.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse"
-        data-auto_prompt="false"
-        data-auto_select="true">
+
+    <div id="g_id_onload" data-client_id="1004197065702-p108mma61hucnrp3qo7bjksai38qr8vt.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse" data-auto_prompt="false" data-auto_select="true">
     </div>
 
-    <div class="g_id_signin"
-         data-type="standard"
-         data-size="large"
-         data-theme="outline"
-         data-text="sign_in_with"
-         data-shape="rectangular"
-         data-logo_alignment="left">
-      </div>
+    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+        data-shape="rectangular" data-logo_alignment="left">
+    </div>
 
 
-      <button id="g_id_signout">Sign Out</button>
+    <button id="g_id_signout">Sign Out</button>
 
 
-      <hr>
-    
-     
+    <hr>
+
+
 
 
     <script>
-    function handleCredentialResponse(response) {
 
-        const body = { id_token: response.credential }
-        
-        //fetch('http://localhost:8080/api/auth/google', {
-        fetch('https://restservr-curso-node.herokuapp.com/api/auth/google', {    
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        })
-        .then( r=> r.json() )
-        .then( resp =>{
-            console.log(resp )
-            localStorage.setItem('email', resp.usuario.correo )
-        })
-        .catch( console.warn )
-    }
+        //console.log(window.location.hostname.includes('localhost'));  /*Conocer la ubicación del proyecto*/
+
+        var url = (window.location.hostname.includes('localhost'))
+            ? 'http://localhost:8080/api/auth/google'
+            : 'https://restservr-curso-node.herokuapp.com/api/auth/google'
+
+        function handleCredentialResponse(response) {
+
+            const body = { id_token: response.credential } 
+
+            fetch(url, {  //Envía fetch a la url de la ubicación   
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+                .then(r => r.json())
+                .then(resp => {
+                    console.log(resp)
+                    localStorage.setItem('email', resp.usuario.correo)
+                })
+                .catch(console.warn)
+        }
 
 
-    const button = document.getElementById('g_id_signout');
-    button.onclick = async() => {
+        const button = document.getElementById('g_id_signout');
+        button.onclick = async () => {
 
-        console.log(google.accounts.id)
-        google.accounts.id.disableAutoSelect()
-        google.accounts.id.revoke(localStorage.getItem('email'), done => {
-           // console.log('consent revoked');
-            localStorage.clear()
-            location.reload()
-        });
-    }
+            console.log(google.accounts.id)
+            google.accounts.id.disableAutoSelect()
+            google.accounts.id.revoke(localStorage.getItem('email'), done => {
+                // console.log('consent revoked');
+                localStorage.clear()
+                location.reload()
+            });
+        }
 
 
     </script>
@@ -77,4 +77,5 @@
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
+
 </html>
