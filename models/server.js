@@ -45,6 +45,7 @@ class Server {
     //Middlewares función que se ejecuta antes de llamar un controlador o seguir con la ejecución de las validaciones
     middlewares(){
         //Directorio Público
+        //Esta sirviendo el archivo index.html
         this.app.use( express.static('public') );
 
         //CORS  //siempre es importante configurar el CORS

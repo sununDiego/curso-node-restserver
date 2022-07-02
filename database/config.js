@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const conexion = async()=>{
 
     try {
-        await mongoose.connect( process.env.MONGODB_ATLAS, {
+        await mongoose.connect( process.env.MONGODB_ATLAS, {  //DB Producción
+        //await mongoose.connect( process.env.MONGODB_LOCAL, {    //DB LOCAL
             useNewUrlParser: true,
             useUnifiedTopology: true
             //useCreateIndex: true,

@@ -1,7 +1,7 @@
 const { Router } = require('express'); //Esto me va a permitir crear una instancia de Router
 const { check } = require('express-validator');
 
-const { login } = require('../controllers/auth');
+const { login, googleSingIn } = require('../controllers/auth');
 const { validarCampos } = require('../middlewares/validar-campos');
 
 
@@ -16,7 +16,17 @@ router.post('/login',[
     check('password', 'El password es obligatorio').not().isEmpty(),
     //Custom middlewares
     validarCampos
-], login );
+], login ); //Finalmente llama al controlador
+
+
+//Sing-in con Google
+//localhost:8080/api/google
+router.post('/google',[
+    //Tienen que mandar el id_token
+    check('id_token', 'El id_token de Google es necesario').not().isEmpty(),
+    //Custom middlewares
+    validarCampos
+], googleSingIn ); //instancia del controlador
 
 
 
