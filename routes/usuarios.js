@@ -1,9 +1,21 @@
 //Rutas relacionadas al usuario
 
-
 const { Router } = require('express'); //Esto me va a permitir crear una instancia de Router
 const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validar-campos');
+
+//middlewares
+ //const { validarCampos } = require('../middlewares/validar-campos');
+ //const { validarJWT } = require('../middlewares/validar-jwt');
+ //const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
+
+const {
+     validarCampos,
+     validarJWT,
+     esAdminRole,
+     tieneRole
+
+   } = require('../middlewares')
+
 const { esRolValido, emailExiste, usuarioExisteByID } = require('../helpers/db-validators');
 
 
@@ -15,6 +27,7 @@ const { usuariosGet,
 
 
 
+//Instancia del Router
 const router = Router();
 
 
@@ -53,6 +66,15 @@ router.put('/:id', [
 
 
 router.delete('/:id', [
+    
+    validarJWT, //validar que tenga un JWT Válido (Esto siempre la primera validación). 
+    
+    //Verificar que el usuario es administrador (solo un rol)
+    //esAdminRole,
+
+    //esta función regresa otra función, (valida si el usuario tiene alguno de esos roles)
+    tieneRole('ADMIN_ROLE', 'SUPER_USER_ROLE'),
+
     //Verificar que el id enviado sea un id válido de mongo
     check('id', 'No es un ID válido').isMongoId(),
     

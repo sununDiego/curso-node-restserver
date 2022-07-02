@@ -49,7 +49,12 @@ const UsuarioSchema = Schema({
 
 //Cuando se mande a llamar el toJSON se ejecuta la función
 UsuarioSchema.methods.toJSON = function() {
-    const { __v, password, ...usuario } = this.toObject();
+    //Se extrae el password, la versión y también el _id
+    //En las consultas ya no me regresa el _id
+    //solo estoy retornando el resto
+    const { __v, password, _id, ...usuario } = this.toObject(); 
+    //cambiando _id por uid
+    usuario.uid = _id;
     return usuario;
 }
 
