@@ -81,7 +81,7 @@ const googleSingIn = async (req, res= response) =>{
             const data = {
                 nombre, 
                 correo,
-                password: ':P',
+                password: ':P', //El password se podría recibir de id_token
                 img,
                 google: true
             };
