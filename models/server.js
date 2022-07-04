@@ -13,10 +13,18 @@ class Server {
         //Variables globales
         this.port = process.env.PORT;
 
-        this.usuariosPath = '/api/usuarios';
+        this.paths = {
+            auth:       '/api/auth',
+            categorias: '/api/categorias',
+            productos:  '/api/productos',
+            usuarios:   '/api/usuarios',
+        }
 
+        //Ruta de usuarios
+        //this.usuariosPath = '/api/usuarios';
         //Paso 1. Nueva ruta
-        this.authPath = '/api/auth';
+        //this.authPath = '/api/auth';
+
 
         //Conectar a la base de datos
         this.conexionDB();
@@ -51,29 +59,25 @@ class Server {
         //CORS  //siempre es importante configurar el CORS
         this.app.use( cors() );
 
-
         //Lectura y parseo del body
         //Capturar la información que es envia en POST, DELETE O PUT
         //Lo intenterá serializar a JSON
         this.app.use( express.json() );
-
-
-
-
     }
 
     routes() {
 
         //Paso 2. Nueva ruta
         //Paso 3. Cear el archivo auth en las rutas
-        this.app.use(this.authPath, require('../routes/auth'));
-
-        this.app.use(this.usuariosPath, require('../routes/usuarios'));
+        this.app.use(this.paths.auth, require('../routes/auth'));
+        //Ruta de categorías
+        this.app.use(this.paths.categorias, require('../routes/categorias'));
+        //Ruta Productos
+        this.app.use(this.paths.productos, require('../routes/productos'));
+        //Ruta usuarios
+        this.app.use(this.paths.usuarios, require('../routes/usuarios'));
 
     }
-
-
-
 
 
     //método listen

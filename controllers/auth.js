@@ -4,9 +4,8 @@ const bcryptjs = require('bcryptjs');
 //Uso del modelo
 const Usuario = require ('../models/usuario');
 
-//importar el JWT
-const { generarJWT } = require('../helpers/generar-jwt');
-const { googleVerify } = require('../helpers/google-verifi');
+//importar el JWT, googleVerify
+const { generarJWT, googleVerify } = require('../helpers');
 
 const login = async (req = request , res = response ) =>{
 

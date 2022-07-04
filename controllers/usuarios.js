@@ -45,7 +45,7 @@ const usuariosGet = async (req = request, res = response) => {
     });
 }
 
-
+//Crear usuario
 const usuariosPost = async (req, res = response) => {
     //Capturar el body en el request.
     //Desestructuración del body 
@@ -96,7 +96,12 @@ const usuariosPut = async (req, res = response) => {
         resto.password = bcriptjs.hashSync(password, salt)
     }
 
-    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+    //Si el correo viene en el body se cambia el correo!
+    if(correo){
+        resto.correo = correo;
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate(id, resto, {new: true}); //Traer ultimo registro en el json
 
 
     res.json({ //Se envía un objeto. En una petición JSON se envía un objeto 
@@ -117,7 +122,7 @@ const usuariosDelete = async (req, res = response) => {
     //const usuario = await Usuario.findByIdAndDelete ( id );
     
     //cambiando el estado del usuario
-    const usuarioEliminado = await Usuario.findByIdAndUpdate ( id, { estado: false } );
+    const usuarioEliminado = await Usuario.findByIdAndUpdate ( id, { estado: false }, { new: true } );
 
     //const usuarioAutenticado = req.usuario; //Usuario autenticado
 

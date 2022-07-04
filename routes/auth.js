@@ -2,7 +2,7 @@ const { Router } = require('express'); //Esto me va a permitir crear una instanc
 const { check } = require('express-validator');
 
 const { login, googleSingIn } = require('../controllers/auth');
-const { validarCampos } = require('../middlewares/validar-campos');
+const { validarCampos } = require('../middlewares');
 
 
 //Instancia del Router

@@ -7,7 +7,7 @@ const validaRoles = require('../middlewares/validar-roles');
 module.exports = {
 
     //usando el operador
-    ...validarCampos,
+    ...validarCampos, // Por que se usó el operador ...?
     ...validarJWT,
     ...validaRoles
 }

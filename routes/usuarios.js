@@ -16,7 +16,7 @@ const {
 
    } = require('../middlewares')
 
-const { esRolValido, emailExiste, usuarioExisteByID } = require('../helpers/db-validators');
+const { esRolValido, emailExiste, usuarioExisteByID } = require('../helpers');
 
 
 const { usuariosGet,

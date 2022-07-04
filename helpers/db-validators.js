@@ -1,5 +1,5 @@
 const Role = require('../models/role');
-const Usuario = require('../models/usuario');
+const {Usuario, Categoria  } = require('../models');
 
 const esRolValido = async (rol = '') => { //verificación personalizada mandando el custom
     //El custom recibe como argumento el rol que recibo del body, en caso de no venga el parámetro se asigna un valor vacío
@@ -20,7 +20,7 @@ const emailExiste = async ( correo = '') => {
 }
 
 
-/*Validar si existe el ID de un susario en la base de datos */
+/*Validar si existe el ID de un usuario en la base de datos */
 const usuarioExisteByID = async ( id ) => {
     const existeUsuario = await Usuario.findById(id);
     if (!existeUsuario) {
@@ -29,10 +29,18 @@ const usuarioExisteByID = async ( id ) => {
 }
 
 
+/*Validar si existe el ID de un usuario en la base de datos */
+const validarCategoriaByID = async ( id ) => {
+    const existeCategoria = await Categoria.findById(id);
+    if (!existeCategoria) {
+        throw new Error(`El id: ${ id } no existe en la base de datos`);
+    }
+}
 
 
 module.exports = {
     esRolValido,
     emailExiste,
-    usuarioExisteByID
+    usuarioExisteByID,
+    validarCategoriaByID
 }
